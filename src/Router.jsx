@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Dashboard from "./view/Dashboard";
 import Surveys from "./view/Surveys";
 import Default from "./view/Default";
+import SurveysView from "./view/SurveysView";
 
 const Routes = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const Routes = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/", element: <Navigate to={"/dashboard"} /> },
       { path: "/surveys", element: <Surveys /> },
+      { path: "/surveys/create", element: <SurveysView /> },
     ],
   },
   {

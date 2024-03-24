@@ -4,8 +4,10 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
 import Context from "../ContextProvider";
+import axiosClient from "../axiosClient";
 
 export default function Default() {
+  const { setUserToken, setcurrentUser, userToken, currentUser } = useContext(Context);
   const user = {
     name: "Tom Cook",
     email: "tom@example.com",
@@ -16,17 +18,29 @@ export default function Default() {
     { name: "Dashboard", href: "/dashboard", current: true },
     { name: "Surveys", href: "/surveys", current: false },
   ];
-  const userNavigation = [{ name: "Sign out", href: "#" }];
+  const userNavigation = [{ name: "Logout", href: "#" }];
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  const { userToken } = useContext(Context);
+
+  const logoutHandler = async () => {
+    axiosClient
+      .post("/logout")
+      .then(() => {
+        setUserToken(null);
+        setcurrentUser({});
+      })
+      .catch((err) => console.error(err));
+  };
+
+  console.log(currentUser);
+  console.log(user);
+  if(!userToken){
+    return <Navigate to={'/regestration/login'} />
+  }
+
   return (
-    <>
-      {!userToken ? (
-        <Navigate to={"/regestration/signup"} />
-      ) : (
         <div className="min-h-full">
           <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
@@ -44,19 +58,20 @@ export default function Default() {
                       <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
                           {navigation.map((item) => (
-                            <a
+                            <NavLink
                               key={item.name}
-                              href={item.href}
-                              className={classNames(
-                                item.current
-                                  ? "bg-gray-900 text-white"
-                                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                "rounded-md px-3 py-2 text-sm font-medium"
-                              )}
-                              aria-current={item.current ? "page" : undefined}
+                              to={item.href}
+                              className={({ isActive }) =>
+                                classNames(
+                                  isActive
+                                    ? "bg-gray-900 text-white"
+                                    : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                  "rounded-md px-3 py-2 text-sm font-medium"
+                                )
+                              }
                             >
                               {item.name}
-                            </a>
+                            </NavLink>
                           ))}
                         </div>
                       </div>
@@ -98,15 +113,15 @@ export default function Default() {
                               {userNavigation.map((item) => (
                                 <Menu.Item key={item.name}>
                                   {({ active }) => (
-                                    <a
-                                      href={item.href}
+                                    <span
+                                    onClick={item.name === 'Logout' && logoutHandler}
                                       className={classNames(
                                         active ? "bg-gray-100" : "",
                                         "block px-4 py-2 text-sm text-gray-700"
                                       )}
                                     >
                                       {item.name}
-                                    </a>
+                                    </span>
                                   )}
                                 </Menu.Item>
                               ))}
@@ -200,7 +215,5 @@ export default function Default() {
           </Disclosure>
           <Outlet />
         </div>
-      )}
-    </>
   );
 }
