@@ -85,7 +85,7 @@ export function ContextProvider({ children }) {
     if (token) {
       _setUserToken(token);
       localStorage.setItem('current_user_token', token);
-    }else{
+    }else{  
       _setUserToken(null);
       localStorage.removeItem('current_user_token');
     }

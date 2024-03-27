@@ -3,13 +3,12 @@ import axios from "axios";
 const axiosClient = axios.create({
   baseURL: `http://127.0.0.1:8000/api`,
 });
-axios.interceptors.request.use((config) => {
+axiosClient.interceptors.request.use((config) => {
   config.headers.Authorization = `Bearer ${localStorage.getItem('current_user_token')}`;
-  // return config;
-  console.log(config);
+  return config;
 });
 
-axios.interceptors.response.use(
+axiosClient.interceptors.response.use(
   (res) => {
     return res;
   },
