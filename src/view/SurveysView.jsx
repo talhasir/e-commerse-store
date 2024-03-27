@@ -1,31 +1,54 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import PageComponent from "../core/PageComponent";
 import { MdAddAPhoto } from "react-icons/md";
-import TButton from '../core/TButton'
+import TButton from "../core/TButton";
+import axiosClient from "../axiosClient";
 
 export default function SurveysView() {
+  const imageRef = useRef();
   const [survey, setSurvey] = useState({
-    title: '',
-    slug: '',
+    title: "",
+    slug: "",
     status: false,
-    discription: '',
+    discription: "",
     image: null,
     image_url: null,
-    expire_date: '',
+    expire_date: "",
     questions: [],
   });
 
-  const onImageChoose = () => {
-    console.log('onImageChoose');
-  }
+  const onImageChoose = (ev) => {
+    const file = ev.target.files[0];
+    const reader = new FileReader;
+    reader.onload = (e) => {
+      setSurvey({
+        ...survey,
+        image: file,
+        image_url: e.target.result,
+      });
+    }
+    reader.readAsDataURL(file);
+  };
 
   const onSurveySubmit = (ev) => {
     ev.preventDefault();
-    console.log('onSurveySubmit');
-  }
+    axiosClient
+      .post("survey", {
+          title: "talha",
+          slug: 'huhefuh',
+          status: true,
+          discription: "lorem ipsu,",
+          image: 'fuie',
+          image_url: 'ebjkgsre',
+          expire_date: "",
+          questions: [],
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
   return (
     <PageComponent heading="Create New Survey">
-      <form action="#" method="POST">
+      <form onSubmit={onSurveySubmit} method="POST">
         <div className="shadow sm:overflew-hidden sm:rounded">
           <div className="space-y-6 bg-white px-6 py-6 sm:p-6">
             {/* image */}
@@ -52,6 +75,7 @@ export default function SurveysView() {
                     type="file"
                     name="imageFile"
                     className="absolute top-0 right-0 bottom-0 left-0 opacity-0 hover:cursor-pointer "
+                    ref={imageRef}
                     onChange={onImageChoose}
                   />
                   Change
@@ -157,9 +181,7 @@ export default function SurveysView() {
 
             {/* button */}
             <div className="bg-gray-50 px-6 py-3 text-right sm:px-6">
-              <TButton >
-                Save
-              </TButton>
+              <TButton>Save</TButton>
             </div>
             {/* button */}
           </div>

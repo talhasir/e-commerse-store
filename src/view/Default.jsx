@@ -27,9 +27,11 @@ export default function Default() {
   const logoutHandler = async () => {
     axiosClient
       .post("/logout")
-      .then(() => {
-        setUserToken(null);
-        setcurrentUser({});
+      .then(({data}) => {
+        if(data.message === "user logout successfuly"){
+          setUserToken(null);
+          setcurrentUser({});
+        }
       })
       .catch((err) => console.error(err));
   };
