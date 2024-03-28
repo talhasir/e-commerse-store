@@ -68,28 +68,32 @@ const products = [
 ];
 
 export function ContextProvider({ children }) {
-  const [currentUser, _setcurrentUser] = useState(localStorage.getItem('current_user'));
-  const [userToken, _setUserToken] = useState(localStorage.getItem('current_user_token'));
+  const [currentUser, _setcurrentUser] = useState(
+    localStorage.getItem("current_user")
+  );
+  const [userToken, _setUserToken] = useState(
+    localStorage.getItem("current_user_token")
+  );
   const [surveys, setSurveys] = useState(products);
   const setcurrentUser = (user) => {
     // debugger
     if (user) {
       _setcurrentUser(user);
-      localStorage.setItem('current_user', {user});
-    }else{
-      localStorage.removeItem('current_user');
+      localStorage.setItem("current_user", { user });
+    } else {
+      localStorage.removeItem("current_user");
     }
-  }
+  };
 
   const setUserToken = (token) => {
     if (token) {
       _setUserToken(token);
-      localStorage.setItem('current_user_token', token);
-    }else{  
+      localStorage.setItem("current_user_token", token);
+    } else {
       _setUserToken(null);
-      localStorage.removeItem('current_user_token');
+      localStorage.removeItem("current_user_token");
     }
-  }
+  };
   console.log(userToken);
   console.log(currentUser);
   return (
