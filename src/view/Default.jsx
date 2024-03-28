@@ -1,4 +1,4 @@
-import { Link, Outlet, Navigate } from "react-router-dom";
+import { Link, Outlet, Navigate, useNavigate } from "react-router-dom";
 import { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -8,6 +8,7 @@ import axiosClient from "../axiosClient";
 
 export default function Default() {
   const { setUserToken, setcurrentUser, userToken, currentUser } = useContext(Context);
+  const navigate = useNavigate();
   const user = {
     name: "Tom Cook",
     email: "tom@example.com",
@@ -31,6 +32,8 @@ export default function Default() {
         if(data.message === "user logout successfuly"){
           setUserToken(null);
           setcurrentUser({});
+        }else if (data.message === 'Unauthenticated') {
+          setUserToken(null);
         }
       })
       .catch((err) => console.error(err));

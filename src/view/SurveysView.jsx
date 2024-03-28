@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import PageComponent from "../core/PageComponent";
 import { MdAddAPhoto } from "react-icons/md";
 import TButton from "../core/TButton";
@@ -10,7 +10,7 @@ export default function SurveysView() {
     title: "",
     slug: "",
     status: false,
-    discription: "",
+    description: "",
     image: null,
     image_url: null,
     expire_date: "",
@@ -33,18 +33,10 @@ export default function SurveysView() {
   const onSurveySubmit = (ev) => {
     ev.preventDefault();
     axiosClient
-      .post("survey", {
-          title: "talha",
-          slug: 'huhefuh',
-          status: true,
-          discription: "lorem ipsu,",
-          image: 'fuie',
-          image_url: 'ebjkgsre',
-          expire_date: "",
-          questions: [],
-      })
+      .post("survey", survey)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+      console.log(survey);
   };
   return (
     <PageComponent heading="Create New Survey">
@@ -119,10 +111,10 @@ export default function SurveysView() {
                 name="discription"
                 id="discription"
                 onChange={(ev) =>
-                  setSurvey({ ...survey, discription: ev.target.value })
+                  setSurvey({ ...survey, description: ev.target.value })
                 }
-                value={survey.discription}
-                placeholder="Survey Title"
+                value={survey.description}
+                placeholder="Survey description"
                 className="bg-gray-100 mt-1 w-full rounded-md shadow-sm focus:ring-2 focus:offset-ring-2 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
@@ -158,8 +150,8 @@ export default function SurveysView() {
                   name="status"
                   id="status"
                   checked={survey.status}
-                  onChange={(ev) =>
-                    setSurvey({ ...survey, status: ev.target.value })
+                  onChange={() =>
+                    setSurvey({ ...survey, status: true })
                   }
                   value={survey.status}
                   className="h-6 w-6 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
