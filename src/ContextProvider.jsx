@@ -6,6 +6,7 @@ const Context = createContext({
   userToken: "",
   setUserToken: () => {},
   surveys: [],
+  questionTypes: [],
 });
 const products = [
   {
@@ -75,6 +76,14 @@ export function ContextProvider({ children }) {
     localStorage.getItem("current_user_token")
   );
   const [surveys, setSurveys] = useState(products);
+  const [questionTypes, setQuestionTypes] = useState([
+    "text",
+    "select",
+    "checkbox",
+    "radio",
+    "textarea",
+  ]);
+
   const setcurrentUser = (user) => {
     // debugger
     if (user) {
@@ -94,8 +103,7 @@ export function ContextProvider({ children }) {
       localStorage.removeItem("current_user_token");
     }
   };
-  console.log(userToken);
-  console.log(currentUser);
+
   return (
     <Context.Provider
       value={{
@@ -104,6 +112,7 @@ export function ContextProvider({ children }) {
         userToken,
         setUserToken,
         surveys,
+        questionTypes,
       }}
     >
       {children}

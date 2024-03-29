@@ -4,9 +4,10 @@ import { MdAddAPhoto } from "react-icons/md";
 import TButton from "../core/TButton";
 import axiosClient from "../axiosClient";
 import { useNavigate } from "react-router-dom";
+import SurveyQuestions from "../components/SurveyQuestions";
 
 export default function SurveysView() {
-  const [errors, setErrors] = React.useState();
+  const [errors, setErrors] = useState();
   const navigate = useNavigate();
   const imageRef = useRef();
   const [survey, setSurvey] = useState({
@@ -26,8 +27,8 @@ export default function SurveysView() {
     reader.onload = (e) => {
       setSurvey({
         ...survey,
-        image: e.target.result,
-        // image_url:
+        image: file,
+        image_url: e.target.result,
       });
     };
     reader.readAsDataURL(file);
@@ -44,6 +45,8 @@ export default function SurveysView() {
       .catch(({ response }) => setErrors(response.data.errors));
     console.log(survey);
   };
+
+  const onSurveyUpdate = (survey) => setSurvey({ ...survey });
   return (
     <PageComponent heading="Create New Survey">
       <form onSubmit={onSurveySubmit} method="POST">
@@ -188,6 +191,10 @@ export default function SurveysView() {
               </div>
             </div>
             {/* Active */}
+
+            {/* Survey Questions */}
+            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} />
+            {/* Survey Questions */}
 
             {/* button */}
             <div className="bg-gray-50 px-6 py-3 text-right sm:px-6">
